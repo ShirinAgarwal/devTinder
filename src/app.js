@@ -2,16 +2,25 @@ const express= require("express");
 
 const app= express();
 
-app.use ("/", (req, res) => {
-    res.send("Namaste Node!");
+//use of middleware
+//handling auth middleware for all GET POST etc. requests
+app.use("/admin", (req, res, next) => {
+    console.log("Admin auth is getting checked!");
+    const token= "xyz";
+    const isAdminAuthorized= token == "xyz";
+    if(!isAdminAuthorized){
+        res.status(401).send("Unauthorized request");
+    } else {
+        next();
+    }
 });
 
-app.use("/hello", (req, res)=> {
-    res.send("Hello hello hello!");
+app.get("/admin/getAllData", (req, res) => {
+    res.send("All data sent");
 });
 
-app.use("/test", (req, res)=> {
-    res.send("Hello from the server");
+app.get("/admin/deleteUser", (req, res) => {
+    res.send("Delete a user");
 });
 
 app.listen(7777, () => {
